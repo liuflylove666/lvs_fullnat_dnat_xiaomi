@@ -133,18 +133,12 @@ tcp_fast_csum_update(int af, struct tcphdr *tcph,
 			csum_fold(ip_vs_check_diff16(oldip->ip6, newip->ip6,
 					 ip_vs_check_diff2(oldport, newport,
 						~csum_unfold(tcph->check))));
-
-
-
 	else
 #endif
 	tcph->check =
 		csum_fold(ip_vs_check_diff4(oldip->ip, newip->ip,
 				 ip_vs_check_diff2(oldport, newport,
 						~csum_unfold(tcph->check))));
-
-
-
 }
 
 
@@ -160,18 +154,12 @@ tcp_partial_csum_update(int af, struct tcphdr *tcph,
 			csum_fold(ip_vs_check_diff16(oldip->ip6, newip->ip6,
 					 ip_vs_check_diff2(oldlen, newlen,
 						~csum_unfold(tcph->check))));
-
-
-
 	else
 #endif
 	tcph->check =
 		csum_fold(ip_vs_check_diff4(oldip->ip, newip->ip,
 				ip_vs_check_diff2(oldlen, newlen,
 						~csum_unfold(tcph->check))));
-
-
-
 }
 
 /* adjust tcp opt mss, sub TCPOLEN_CIP */

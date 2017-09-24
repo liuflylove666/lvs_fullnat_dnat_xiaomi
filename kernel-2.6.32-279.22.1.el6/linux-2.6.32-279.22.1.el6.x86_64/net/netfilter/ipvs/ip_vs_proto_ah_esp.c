@@ -50,14 +50,16 @@ ah_esp_conn_in_get(int af, const struct sk_buff *skb, struct ip_vs_protocol *pp,
 
 	if (likely(!inverse)) {
 		cp = ip_vs_conn_get(af, IPPROTO_UDP,
-				    &iph->saddr,
-				    htons(PORT_ISAKMP),
-				    &iph->daddr, htons(PORT_ISAKMP), res_dir);
+                                       &iph->saddr,
+                                       htons(PORT_ISAKMP),
+                                       &iph->daddr,
+                                       htons(PORT_ISAKMP), res_dir);
 	} else {
 		cp = ip_vs_conn_get(af, IPPROTO_UDP,
-				    &iph->daddr,
-				    htons(PORT_ISAKMP),
-				    &iph->saddr, htons(PORT_ISAKMP), res_dir);
+                                       &iph->daddr,
+                                       htons(PORT_ISAKMP),
+                                       &iph->saddr,
+                                       htons(PORT_ISAKMP), res_dir);
 	}
 
 	if (!cp) {
@@ -88,16 +90,16 @@ ah_esp_conn_out_get(int af, const struct sk_buff *skb,
 
 	if (likely(!inverse)) {
 		cp = ip_vs_conn_get(af, IPPROTO_UDP,
-				    &iph->saddr,
-				    htons(PORT_ISAKMP),
-				    &iph->daddr, 
-                    htons(PORT_ISAKMP), res_dir);
+                                       &iph->saddr,
+                                       htons(PORT_ISAKMP),
+                                       &iph->daddr, 
+                                       htons(PORT_ISAKMP), res_dir);
 	} else {
 		cp = ip_vs_conn_get(af, IPPROTO_UDP,
-				    &iph->daddr,
-				    htons(PORT_ISAKMP),
-				    &iph->saddr, 
-                    htons(PORT_ISAKMP), res_dir);
+                                       &iph->daddr,
+                                       htons(PORT_ISAKMP),
+                                       &iph->saddr, 
+                                       htons(PORT_ISAKMP), res_dir);
 	}
 
 	if (!cp) {

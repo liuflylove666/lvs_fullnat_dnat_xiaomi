@@ -690,6 +690,7 @@ __ip_vs_unbind_svc(struct ip_vs_dest *dest)
 		kfree(svc);
 }
 
+
 /*
  *	Returns hash value for real service
  */
@@ -1624,7 +1625,6 @@ ip_vs_add_service(struct ip_vs_service_user_kern *u,
 	svc->timeout = u->timeout * HZ;
 	svc->netmask = u->netmask;
 
-
 	INIT_LIST_HEAD(&svc->destinations);
 	rwlock_init(&svc->sched_lock);
 	spin_lock_init(&svc->stats.lock);
@@ -1786,7 +1786,6 @@ static void __ip_vs_del_service(struct ip_vs_service *svc)
 		ip_vs_app_inc_put(svc->inc);
 		svc->inc = NULL;
 	}
-
 
 	/*
 	 *    Unlink the whole destination list
@@ -1965,6 +1964,7 @@ proc_do_sync_threshold(ctl_table *table, int write,
 	return rc;
 }
 
+
 /*
  *	IPVS sysctl table (under the /proc/sys/net/ipv4/vs/)
  */
@@ -2112,7 +2112,6 @@ static struct ctl_table vs_vars[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_do_sync_threshold,
 	},
-
 	{
 		.procname	= "nat_icmp_send",
 		.data		= &sysctl_ip_vs_nat_icmp_send,
@@ -2668,8 +2667,8 @@ static const struct file_operations ip_vs_stats_fops = {
 
 #ifdef CONFIG_PROC_FS
 /*
- * Statistics for FULLNAT and SYNPROXY
- * in /proc/net/ip_vs_ext_stats
+ *	Statistics for FULLNAT and SYNPROXY
+ *	in /proc/net/ip_vs_ext_stats
  */
 
 struct ip_vs_estats_mib *ip_vs_esmib;
@@ -2815,10 +2814,10 @@ static const unsigned char set_arglen[SET_CMDID(IP_VS_SO_SET_MAX)+1] = {
 	[SET_CMDID(IP_VS_SO_SET_STARTDAEMON)]	= DAEMON_ARG_LEN,
 	[SET_CMDID(IP_VS_SO_SET_STOPDAEMON)]	= DAEMON_ARG_LEN,
 	[SET_CMDID(IP_VS_SO_SET_ZERO)]		= SERVICE_ARG_LEN,
-	[SET_CMDID(IP_VS_SO_SET_ADDLADDR)] = ZONELADDR_ARG_LEN,
-	[SET_CMDID(IP_VS_SO_SET_DELLADDR)] = ZONELADDR_ARG_LEN,
-	[SET_CMDID(IP_VS_SO_SET_ADDZONE)] = ZONE_ARG_LEN,
-	[SET_CMDID(IP_VS_SO_SET_DELZONE)] = ZONE_ARG_LEN,
+	[SET_CMDID(IP_VS_SO_SET_ADDLADDR)] 	= ZONELADDR_ARG_LEN,
+	[SET_CMDID(IP_VS_SO_SET_DELLADDR)] 	= ZONELADDR_ARG_LEN,
+	[SET_CMDID(IP_VS_SO_SET_ADDZONE)] 	= ZONE_ARG_LEN,
+	[SET_CMDID(IP_VS_SO_SET_DELZONE)] 	= ZONE_ARG_LEN,
 	
 };
 
@@ -2965,7 +2964,6 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
 	usvc_compat = (struct ip_vs_service_user *)arg;
 	udest_compat = (struct ip_vs_dest_user *)(usvc_compat + 1);
 
-	
 	/* We only use the new structs internally, so copy userspace compat
 	 * structs to extended internal versions */
 	ip_vs_copy_usvc_compat(&usvc, usvc_compat);
@@ -2987,9 +2985,6 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
 		ret = -EFAULT;
 		goto out_unlock;
 	}
-
-
-	
 
 	/* Lookup the exact service by <protocol, addr, port> or fwmark */
 	if (usvc.fwmark == 0)
@@ -4337,8 +4332,6 @@ static int ip_vs_genl_set_cmd(struct sk_buff *skb, struct genl_info *info)
 		if (ret)
 			goto out;
 	}
-
-
 
 	switch (cmd) {
 	case IPVS_CMD_NEW_SERVICE:
