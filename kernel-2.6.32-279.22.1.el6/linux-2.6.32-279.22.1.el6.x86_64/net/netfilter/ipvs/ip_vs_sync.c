@@ -303,6 +303,7 @@ static void ip_vs_process_message(const char *buffer, const size_t buflen)
 	struct ip_vs_dest *dest;
 	char *p;
 	int i;
+	int res_dir;
 
 	if (buflen < sizeof(struct ip_vs_sync_mesg)) {
 		IP_VS_ERR_RL("sync message header too short\n");
@@ -371,11 +372,11 @@ static void ip_vs_process_message(const char *buffer, const size_t buflen)
 		}
 
 		if (!(flags & IP_VS_CONN_F_TEMPLATE))
-			cp = ip_vs_conn_in_get(AF_INET, s->protocol,
+			cp = ip_vs_conn_get(AF_INET, s->protocol,
 					       (union nf_inet_addr *)&s->caddr,
 					       s->cport,
 					       (union nf_inet_addr *)&s->vaddr,
-					       s->vport);
+						   s->vport, &res_dir);
 		else
 			cp = ip_vs_ct_in_get(AF_INET, s->protocol,
 					     (union nf_inet_addr *)&s->caddr,
@@ -413,7 +414,7 @@ static void ip_vs_process_message(const char *buffer, const size_t buflen)
 					    s->vport,
 					    (union nf_inet_addr *)&s->daddr,
 					    s->dport,
-					    flags, dest);
+					    flags, dest, NULL, 0);
 			if (dest)
 				atomic_dec(&dest->refcnt);
 			if (!cp) {

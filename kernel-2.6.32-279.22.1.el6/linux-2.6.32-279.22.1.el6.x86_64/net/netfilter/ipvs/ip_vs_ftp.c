@@ -148,7 +148,7 @@ static int ip_vs_ftp_out(struct ip_vs_app *app, struct ip_vs_conn *cp,
 	struct ip_vs_conn *n_cp;
 	char buf[24];		/* xxx.xxx.xxx.xxx,ppp,ppp\000 */
 	unsigned buf_len;
-	int ret;
+	int ret, res_dir;
 
 #ifdef CONFIG_IP_VS_IPV6
 	/* This application helper doesn't work with IPv6 yet,
@@ -187,15 +187,15 @@ static int ip_vs_ftp_out(struct ip_vs_app *app, struct ip_vs_conn *cp,
 		/*
 		 * Now update or create an connection entry for it
 		 */
-		n_cp = ip_vs_conn_out_get(AF_INET, iph->protocol, &from, port,
-					  &cp->caddr, 0);
+		n_cp = ip_vs_conn_get(AF_INET, iph->protocol, &from, port,
+                                         &cp->caddr, 0, &res_dir);
 		if (!n_cp) {
 			n_cp = ip_vs_conn_new(AF_INET, IPPROTO_TCP,
 					      &cp->caddr, 0,
 					      &cp->vaddr, port,
 					      &from, port,
 					      IP_VS_CONN_F_NO_CPORT,
-					      cp->dest);
+					      cp->dest, NULL, 0);
 			if (!n_cp)
 				return 0;
 
@@ -256,6 +256,7 @@ static int ip_vs_ftp_in(struct ip_vs_app *app, struct ip_vs_conn *cp,
 	union nf_inet_addr to;
 	__be16 port;
 	struct ip_vs_conn *n_cp;
+	int res_dir;
 
 #ifdef CONFIG_IP_VS_IPV6
 	/* This application helper doesn't work with IPv6 yet,
@@ -325,16 +326,17 @@ static int ip_vs_ftp_in(struct ip_vs_app *app, struct ip_vs_conn *cp,
 		  ip_vs_proto_name(iph->protocol),
 		  &to.ip, ntohs(port), &cp->vaddr.ip, 0);
 
-	n_cp = ip_vs_conn_in_get(AF_INET, iph->protocol,
-				 &to, port,
-				 &cp->vaddr, htons(ntohs(cp->vport)-1));
+	n_cp = ip_vs_conn_get(AF_INET, iph->protocol,
+			      &to, port,
+			      &cp->vaddr, htons(ntohs(cp->vport) - 1),
+			      &res_dir);
 	if (!n_cp) {
 		n_cp = ip_vs_conn_new(AF_INET, IPPROTO_TCP,
 				      &to, port,
 				      &cp->vaddr, htons(ntohs(cp->vport)-1),
 				      &cp->daddr, htons(ntohs(cp->dport)-1),
 				      0,
-				      cp->dest);
+                      cp->dest, NULL, 0);
 		if (!n_cp)
 			return 0;
 
